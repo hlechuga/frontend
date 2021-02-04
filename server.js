@@ -3,6 +3,8 @@ const path = require('path');
 const app = express();
 var process = require('process')
 
+var port = 5000
+
 app.use(express.static(path.join(__dirname, 'build')));
 
 // START: FOR DEVELOPMENT ONLY
@@ -26,5 +28,5 @@ process.on('SIGINT', () => {
   console.info("Interrupted")
   process.exit(0)
 })
-
-app.listen(5000);
+console.info("Serving application in port", port)
+app.listen(port);
