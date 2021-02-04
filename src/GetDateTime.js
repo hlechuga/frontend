@@ -7,23 +7,49 @@ class GetDateTime extends React.Component {
         this.state = {
             date: null,
             time: null,
-            timezone: null
+            timezone: null,
+            errormsg: null
         };
+        this.getData = this.getData.bind(this);
     }
 
     componentDidMount() {
-        // Simple GET request using fetch
-        fetch('api/datetime')
-            .then(response => response.json())
-            .then(data => this.setState({ date: data.date, time: data.time, timezone: data.timezone}));
+        this.interval = setInterval(this.getData, 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+      }
+
+    getData() {
+        // GET request using fetch with async/await
+        fetch('/api/datetime')
+            .then(async response => {
+                const data = await response.json();
+
+                // check for error response
+                if (!response.ok) {
+                    const error = response.statusText;
+                    return Promise.reject(error);
+                    
+                }
+                console.log('date fetched', data);
+                this.setState({ date: data.date, time: data.time, timezone: data.timezone, errormsg: null })
+            })
+            .catch(error => {
+                this.setState({ date: null, time: null, timezone: null, errormsg: "Unable to fetch server's date and time" });
+                console.error('There was an error!', error);
+            });
     }
 
     render() {
-        const { date, time, timezone } = this.state;
+        const { date, time, timezone, errormsg } = this.state;
         return (
-            <div>
-                <h1>Server Datetime</h1>
-                <p> {date} {time} {timezone}</p>
+            <div className="jumbotron jumbotron-fluid" >
+                 <div className="container">
+                    <h1 class="display-4" >Server Datetime</h1>
+                    <p class="lead"> {errormsg} {date} {time} {timezone} </p>
+                </div>
             </div>
         );
     }
