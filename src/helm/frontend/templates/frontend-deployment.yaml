@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.main.replicas }}
+  revisionHistoryLimit: {{ .Values.global.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      containers:
+      - name: {{ $.Values.main.name }}
+        image: {{ .Values.global.repo }}/{{ .Values.main.image }}:{{ .Chart.Version }}
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: {{ .Values.main.resources.requests.cpu | quote }}
+            memory: {{ .Values.main.resources.requests.memory | quote }}
+          limits:
+            cpu: {{ .Values.main.resources.limits.cpu | quote }}
+            memory: {{ .Values.main.resources.limits.memory | quote }}
+        ports:
+        - containerPort: {{ .Values.main.containerPort }}
