@@ -1,0 +1,23 @@
+global:
+  repo: docker.io/hlechuga
+  revisionHistoryLimit: 5
+service:
+  type: LoadBalancer
+  http:
+    port: 5000
+    targetPort: 5000
+    name: http
+main:
+  name: frontend
+  image: frontend
+  env:
+    tz: UTC
+  replicas: 1
+  resources:
+    requests:
+      cpu: "20m"
+      memory: "20Mi"
+    limits:
+      cpu: "100m"
+      memory: "200Mi"
+  containerPort: 5000
