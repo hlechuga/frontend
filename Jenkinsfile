@@ -79,7 +79,7 @@ pipeline {
                 stage('Deploy to Dev Cluster') {
                     steps {
                         script {
-                            catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+                            catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                                 try {
                                     resp = input id: 'deploy-dev', message:
                                     'Proceed to deploy in dev cluster?', submitterParameter: 'approver'
@@ -103,7 +103,7 @@ pipeline {
                     }
                     steps {
                         script {
-                            catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+                            catchError(buildResult: 'SUCCESS', stageResult: 'UNSTABLE') {
                                 try {
                                     resp = input id: 'deploy-staging', message:
                                     'Proceed to deploy in staging cluster?', submitterParameter: 'approver'
@@ -123,7 +123,7 @@ pipeline {
                 }
                 stage('Deploy to Production Cluster') {
                     when {
-                        branch '^(prod.*|master)$'
+                        expression { env.BRANCH_NAME ==~ '^(prod.*|master)$' }
                     }
                     steps {
                         script {
