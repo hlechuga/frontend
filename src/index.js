@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import GetDateTime from './GetDateTime';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <GetDateTime />
   </React.StrictMode>,
   document.getElementById('root')
 );
